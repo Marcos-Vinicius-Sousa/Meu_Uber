@@ -13,6 +13,7 @@ class _PainelMotoristaState extends State<PainelMotorista> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Painel Motorista"),
+          centerTitle: true,
           backgroundColor: Color(0xff37474f)
       ),
       body: Container(

@@ -20,7 +20,7 @@ class _CadastroState extends State<Cadastro> {
   TextEditingController _controllerConfirmSenha = TextEditingController();
 
   bool _TipoUsuario = false;
-  String _mensagemErro = "";
+  String _menssagemErro = "";
 
   _validarCampos(){
 
@@ -47,43 +47,30 @@ class _CadastroState extends State<Cadastro> {
             _cadastrarUsuario(usuario);
           }else{
             setState(() {
-              _mensagemErro = "As duas senhas devem ser iguais!";
+              _menssagemErro = "As duas senhas devem ser iguais!";
             });
           }
 
         }else{
           setState(() {
-            _mensagemErro = "A senha deve conter mais que 5 caracteres!";
+            _menssagemErro = "A senha deve conter mais que 5 caracteres!";
           });
         }
 
       }else{
         setState(() {
-          _mensagemErro = "preencha com um email válido!";
+          _menssagemErro = "preencha com um email válido!";
         });
       }
     }else{
       setState(() {
-        _mensagemErro = "preencha o nome!";
+        _menssagemErro = "preencha o nome!";
       });
     }
 
   }
 
   _cadastrarUsuario( Usuario usuario){
-
-    switch(usuario.tipoUsuario){
-      case "motorista":
-        Navigator.pushNamedAndRemoveUntil(
-            context,
-            "/painel-motorista", (_) => false);
-        break;
-      case "passageiro":
-        Navigator.pushNamedAndRemoveUntil(
-            context,
-            "/painel-passageiro", (_) => false);
-        break;
-    }
 
     FirebaseAuth auth = FirebaseAuth.instance;
     FirebaseFirestore db = FirebaseFirestore.instance;
@@ -96,7 +83,20 @@ class _CadastroState extends State<Cadastro> {
 
         // redirecionar para o painel, de acordo com o Usuario
 
-
+        switch(usuario.tipoUsuario){
+          case "motorista":
+            Navigator.pushNamedAndRemoveUntil(
+                context,
+                "/painel-motorista", (_) => false);
+            break;
+          case "passageiro":
+            Navigator.pushNamedAndRemoveUntil(
+                context,
+                "/painel-passageiro", (_) => false);
+            break;
+        }
+    }).catchError((error){
+      _menssagemErro = "Erro ao cadastrar usuário, verifique os campos e tente novamente!";
     });
   }
 
@@ -227,7 +227,7 @@ class _CadastroState extends State<Cadastro> {
                   padding: EdgeInsets.only(top: 16),
                   child: Center(
                     child: Text(
-                      _mensagemErro,
+                      _menssagemErro,
                       style: TextStyle(color: Colors.red, fontSize: 20),
                     ),
                   ),
