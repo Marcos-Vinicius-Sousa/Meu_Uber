@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_uber/telas/Cadastro.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -92,7 +93,12 @@ class _HomeState extends State<Home> {
                     style: TextStyle(color: Colors.white)
                     ),
                     onTap: (){
-
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Cadastro()
+                          )
+                      );
                     },
                   ),
                 ),
