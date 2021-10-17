@@ -72,6 +72,19 @@ class _CadastroState extends State<Cadastro> {
 
   _cadastrarUsuario( Usuario usuario){
 
+    switch(usuario.tipoUsuario){
+      case "motorista":
+        Navigator.pushNamedAndRemoveUntil(
+            context,
+            "/painel-motorista", (_) => false);
+        break;
+      case "passageiro":
+        Navigator.pushNamedAndRemoveUntil(
+            context,
+            "/painel-passageiro", (_) => false);
+        break;
+    }
+
     FirebaseAuth auth = FirebaseAuth.instance;
     FirebaseFirestore db = FirebaseFirestore.instance;
     auth.createUserWithEmailAndPassword(
@@ -83,23 +96,13 @@ class _CadastroState extends State<Cadastro> {
 
         // redirecionar para o painel, de acordo com o Usuario
 
-      switch(usuario.tipoUsuario){
-        case "motorista":
-          Navigator.pushNamedAndRemoveUntil(
-              context,
-              "/painel-motorista", (_) => false);
-          break;
-        case "passageiro":
-          Navigator.pushNamedAndRemoveUntil(
-              context,
-              "/painel-passageiro", (_) => false);
-          break;
-      }
+
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    Firebase.initializeApp();
     return  Scaffold(
       appBar: AppBar(
         title: Text("Cadastro"),

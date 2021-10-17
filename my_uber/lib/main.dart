@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:my_uber/telas/Home.dart';
 import 'package:my_uber/telas/Rotas.dart';
@@ -7,7 +8,9 @@ final ThemeData temaPadrao = ThemeData(
     colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Color(0xff546e7a))
 );
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp();
   runApp(MaterialApp(
     title: "Uber",
     home: Home(),

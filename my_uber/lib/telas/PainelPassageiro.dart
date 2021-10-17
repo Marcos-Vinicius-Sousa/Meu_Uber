@@ -13,6 +13,7 @@ class _PainelPassageiroState extends State<PainelPassageiro> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Painel Passageiro"),
+          backgroundColor: Color(0xff37474f)
       ),
       body: Container(
 
