@@ -36,7 +36,7 @@ class _HomeState extends State<Home> {
                 ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(5, 15, 5, 15),
+                  padding: EdgeInsets.fromLTRB(10, 20, 20, 5),
                   child: TextField(
                     controller: _controllerEmail,
                     keyboardType: TextInputType.emailAddress,
@@ -53,7 +53,7 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(5, 5, 5, 15),
+                  padding: EdgeInsets.fromLTRB(10, 20, 20, 20),
                   child: TextField(
                     obscureText: true,
                     controller: _controllerSenha,
@@ -72,7 +72,7 @@ class _HomeState extends State<Home> {
                 ),
 
                 Padding(
-                    padding: EdgeInsets.only(top: 16,bottom: 10),
+                    padding: EdgeInsets.fromLTRB(10, 20, 20, 20),
                 child: RaisedButton(
                   child: Text(
                       "Entrar",
@@ -93,12 +93,7 @@ class _HomeState extends State<Home> {
                     style: TextStyle(color: Colors.white)
                     ),
                     onTap: (){
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Cadastro()
-                          )
-                      );
+                      Navigator.pushNamed(context, "/cadastro");
                     },
                   ),
                 ),
