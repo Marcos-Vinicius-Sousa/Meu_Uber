@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_uber/telas/Cadastro.dart';
+import 'package:my_uber/telas/PainelMotorista.dart';
+import 'package:my_uber/telas/PainelPassageiro.dart';
 
 import 'Home.dart';
 
@@ -18,7 +20,15 @@ class Rotas {
         return MaterialPageRoute(
             builder: (_) => Cadastro()
         );
-        break;
+      case"/painel-motorista":
+        return MaterialPageRoute(
+            builder: (_) => PainelMotorista()
+        );
+      case"/painel-passageiro":
+        return MaterialPageRoute(
+            builder: (_) => PainelPassageiro()
+        );
+
 
       default:
         _erroRota();

@@ -78,10 +78,23 @@ class _CadastroState extends State<Cadastro> {
         email: usuario.email,
         password: usuario.senha).then((firebaseUser){
         db.collection("usuarios")
-            .doc(firebaseUser.user.uid)
+            .doc(firebaseUser.user!.uid)
             .set(usuario.toMap());
 
-        // redirecionar para o painel, de acordo com o Usuario 
+        // redirecionar para o painel, de acordo com o Usuario
+
+      switch(usuario.tipoUsuario){
+        case "motorista":
+          Navigator.pushNamedAndRemoveUntil(
+              context,
+              "/painel-motorista", (_) => false);
+          break;
+        case "passageiro":
+          Navigator.pushNamedAndRemoveUntil(
+              context,
+              "/painel-passageiro", (_) => false);
+          break;
+      }
     });
   }
 
