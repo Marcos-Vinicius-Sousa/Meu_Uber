@@ -18,8 +18,14 @@ class _HomeState extends State<Home> {
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerSenha = TextEditingController();
   String _menssagemErro = "";
+  bool _carregando = false;
 
   _logarUsuario(Usuario usuario) {
+
+    setState(() {
+      _carregando = true;
+    });
+
     FirebaseAuth auth = FirebaseAuth.instance;
     auth.signInWithEmailAndPassword(
         email: usuario.email,
@@ -53,6 +59,10 @@ class _HomeState extends State<Home> {
 
     Map<String, dynamic>? dados = snapshot.data() as Map<String, dynamic>?;
     String tipoUsuario = dados!["tipoUsuario"];
+
+    setState(() {
+      _carregando = false;
+    });
 
     switch(tipoUsuario){
       case "motorista":
@@ -98,7 +108,9 @@ class _HomeState extends State<Home> {
     // recuperando o usuario que esta logado no momento
     User? usuarioLogado = await auth.currentUser;
     if (usuarioLogado != null) {
-      Navigator.pushReplacementNamed(context, "/");
+    //Navigator.pushReplacementNamed(context, "/");
+    String idUsuario = usuarioLogado.uid;
+    _redirecionarPainelPorTipo(idUsuario);
     }
   }
 
@@ -195,6 +207,10 @@ class _HomeState extends State<Home> {
                     },
                   ),
                 ),
+                _carregando ?
+                    Center(child: CircularProgressIndicator(
+                      backgroundColor: Colors.white,
+                    ),) : Container(),
                 Padding(
                   padding: EdgeInsets.only(top: 16),
                   child: Center(
