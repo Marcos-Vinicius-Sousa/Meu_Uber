@@ -20,7 +20,7 @@ class _CadastroState extends State<Cadastro> {
   TextEditingController _controllerConfirmSenha = TextEditingController();
 
   bool _TipoUsuario = false;
-  String _menssagemErro = "";
+  String _mensagemErro = "";
 
   _validarCampos(){
 
@@ -47,30 +47,32 @@ class _CadastroState extends State<Cadastro> {
             _cadastrarUsuario(usuario);
           }else{
             setState(() {
-              _menssagemErro = "As duas senhas devem ser iguais!";
+              _mensagemErro = "As duas senhas devem ser iguais!";
             });
           }
 
         }else{
           setState(() {
-            _menssagemErro = "A senha deve conter mais que 5 caracteres!";
+            _mensagemErro = "A senha deve conter mais que 5 caracteres!";
           });
         }
 
       }else{
         setState(() {
-          _menssagemErro = "preencha com um email válido!";
+          _mensagemErro = "preencha com um email válido!";
         });
       }
     }else{
       setState(() {
-        _menssagemErro = "preencha o nome!";
+        _mensagemErro = "preencha o nome!";
       });
     }
 
   }
 
   _cadastrarUsuario( Usuario usuario){
+
+
 
     FirebaseAuth auth = FirebaseAuth.instance;
     FirebaseFirestore db = FirebaseFirestore.instance;
@@ -80,7 +82,6 @@ class _CadastroState extends State<Cadastro> {
         db.collection("usuarios")
             .doc(firebaseUser.user!.uid)
             .set(usuario.toMap());
-
         // redirecionar para o painel, de acordo com o Usuario
 
         switch(usuario.tipoUsuario){
@@ -95,9 +96,9 @@ class _CadastroState extends State<Cadastro> {
                 "/painel-passageiro", (_) => false);
             break;
         }
-    }).catchError((error){
-      _menssagemErro = "Erro ao cadastrar usuário, verifique os campos e tente novamente!";
     });
+
+
   }
 
   @override
@@ -227,7 +228,7 @@ class _CadastroState extends State<Cadastro> {
                   padding: EdgeInsets.only(top: 16),
                   child: Center(
                     child: Text(
-                      _menssagemErro,
+                      _mensagemErro,
                       style: TextStyle(color: Colors.red, fontSize: 20),
                     ),
                   ),

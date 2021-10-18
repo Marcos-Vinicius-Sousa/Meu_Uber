@@ -23,6 +23,7 @@ class _PainelPassageiroState extends State<PainelPassageiro> {
 
     switch(escolha){
       case "Deslogar":
+        _deslogarUsuario();
         break;
 
       case "Configurações":

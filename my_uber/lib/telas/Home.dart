@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:my_uber/model/Usuario.dart';
-import 'package:my_uber/telas/Cadastro.dart';
+import 'package:my_uber/telas/PainelPassageiro.dart';
+
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -18,25 +21,47 @@ class _HomeState extends State<Home> {
 
   _logarUsuario(Usuario usuario) {
     FirebaseAuth auth = FirebaseAuth.instance;
-
     auth.signInWithEmailAndPassword(
         email: usuario.email,
-        password: usuario.senha).then((firebaseUser) {
-      switch (usuario.tipoUsuario) {
-        case "motorista":
-          Navigator.pushNamedAndRemoveUntil(
-              context,
-              "/painel-motorista", (_) => false);
-          break;
-        case "passageiro":
-          Navigator.pushNamedAndRemoveUntil(
-              context,
-              "/painel-passageiro", (_) => false);
-          break;
-      }
+        password: usuario.senha
+    ).then((firebaseUser) {
+
+      _redirecionarPainelPorTipo( firebaseUser.user!.uid);
+
+      //Navigator.pushReplacementNamed(context,"/");
+      /*Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => PainelPassageiro()
+          )
+      );*/
     }).catchError((error) {
-      _menssagemErro = "Erro ao autenticar usuário, verifique e-mail e senha!";
+      setState(() {
+        _menssagemErro =
+        "Erro ao identificar usuário, verifique e-mail e senha e tente novamente.";
+      });
     });
+  }
+
+  _redirecionarPainelPorTipo(String idUsuario) async {
+
+    FirebaseFirestore db =FirebaseFirestore.instance;
+
+    DocumentSnapshot snapshot = await db.collection("usuarios")
+    .doc(idUsuario)
+    .get();
+
+    Map<String, dynamic>? dados = snapshot.data() as Map<String, dynamic>?;
+    String tipoUsuario = dados!["tipoUsuario"];
+
+    switch(tipoUsuario){
+      case "motorista":
+        Navigator.pushReplacementNamed(context, "/painel-motorista");
+        break;
+      case "passageiro":
+        Navigator.pushReplacementNamed(context, "/painel-passageiro");
+        break;
+    }
   }
 
   _validarCampos() {
@@ -47,26 +72,46 @@ class _HomeState extends State<Home> {
 
     //validar campos
     if (email.isNotEmpty && email.contains("@")) {
-      if (senha1.isNotEmpty && senha1.length > 5) {
+      if (senha1.isNotEmpty) {
+        setState(() {
+          _menssagemErro = "";
+        });
         Usuario usuario = Usuario();
-        usuario.email = email;
-        usuario.senha = senha1;
+        usuario.email = email.replaceAll(" ", "");
+        usuario.senha = senha1.replaceAll(" ", "");
         _logarUsuario(usuario);
       } else {
         setState(() {
-          _menssagemErro = "As duas senhas devem ser iguais!";
+          _menssagemErro = "Preencha a senha.";
         });
-      };
+      }
     } else {
       setState(() {
-        _menssagemErro = "preencha com um email válido!";
+        _menssagemErro = "Preencha o e-mail utilizando  @";
       });
     }
+  }
+
+  Future _verificarUsuarioLogado() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    auth.signOut();
+    // recuperando o usuario que esta logado no momento
+    User? usuarioLogado = await auth.currentUser;
+    if (usuarioLogado != null) {
+      Navigator.pushReplacementNamed(context, "/");
+    }
+  }
+
+  @override
+  void initState() {
+    _verificarUsuarioLogado();
+    super.initState();
   }
 
 
   @override
   Widget build(BuildContext context) {
+    Firebase.initializeApp();
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -135,8 +180,9 @@ class _HomeState extends State<Home> {
                     ),
                     color: Color(0xff1ebbd8),
                     padding: EdgeInsets.fromLTRB(32, 16, 32, 16),
-                    onPressed: () {},
-
+                    onPressed: () {
+                      _validarCampos();
+                    },
                   ),
                 ),
                 Center(

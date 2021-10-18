@@ -20,7 +20,11 @@ class Usuario {
   }
 
   String verificarTipoUsuario(bool tipoUsuario){
-    return tipoUsuario ? "motorista" : "passageiro";
+    if(tipoUsuario == true){
+      return "motorista";
+    }else{
+      return "passageiro";
+    }
   }
 
   String get tipoUsuario => _tipoUsuario;
